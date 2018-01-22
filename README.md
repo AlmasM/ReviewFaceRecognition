@@ -14,8 +14,14 @@ Motivation: For my research, I was tasked to evaluate exisiting face recognition
 **Step 2** Installation of Testing APIs
 - **Microsoft Azure**
   - Hardest and least intuitive API (among these APIs) to install. Perhaps it was my inexperience, but I found online modules and guides provided by Microsoft to be unclear, and I couldn't find much information on th internet on how to install/deploy the package.
-  - Note 1: when using Free Tier you are limited to 10,000 requests per month AND 20 calls per minute. In other words, you will be able to evaluate only 20 images per minute. 
-  - Note 2: Whenever Azure produces an output, the format of the ```ca810040-6727-4500-895d-f2258bbebf83 ```  which I found to be somewhat inconvenient. As a result, I stored result in the following (key-value) format: ```imageName: ca810040-6727-4500-895d-f2258bbebf83 ```, where imageName was treated as key.
+  - Note: when using Free Tier you are limited to 10,000 requests per month AND 20 calls per minute. In other words, you will be able to evaluate only 20 images per minute. 
+  - Installation guides can be found [here](https://docs.microsoft.com/en-us/azure/cognitive-services/face/quickstarts/python)
+    - Note: Suppose you want to classify faces, group images or find similarities between them. First, you will have to detect faces in the images and then you will have to separately run another code that will call . All in all, you will have to run two separate calls. For example, in this guide, I only run face detection, which means that Azure only identified whether faces existed in the following images or not. If I wanted to group images together, I would have had to run another code (or modify my existing one) to make grouping happen. In sum, it would have been two different operations. More information can be found [here](https://docs.microsoft.com/en-us/azure/cognitive-services/face/overview)
+  - You can use my code named [azure_demo.py](https://github.com/AlmasM/ReviewFaceRecognition/blob/master/azure/azure_demo.py)
+    - Values to change: *uri_base* - you need to provide your region when you created account. Also, you will need to add *subscription_key*
+    - Input: *inputDir* - is a location of the folder that needs to be evaluated
+    - Output: *identified.txt* - is txt file will print out image name and unique ID associate with image. I [provided](https://github.com/AlmasM/ReviewFaceRecognition/blob/master/azure/idenfied.txt) my file for illustrative purposes. Whenever you see image name and ID next to it, it means that Azure was able to **identify** the image as a face. It doesn't mean that Azure was able to recognize the image.
+      - Note 2: Whenever Azure produces an output for each evaluated image, it produces uniquie ID ```ca810040-6727-4500-895d-f2258bbebf83 ```  which I found to be somewhat inconvenient. So, in order to see your result, you must match it with the image you evaluated. I stored result in the following (key-value) format: ```imageName: ca810040-6727-4500-895d-f2258bbebf83 ```, where imageName was treated as key.
 - **Clarifai**
   - Perhaps the easiest package to install and employ from the following APIs. First, create account and get you API Key. 
   Second, open terminal and type the following command: ``` pip install clarifai```
@@ -39,18 +45,27 @@ Motivation: For my research, I was tasked to evaluate exisiting face recognition
     - Peculiar thing about this package is that it can take only 1 image as a training sample (i.e. you can't provide more than 1 training sample for each face you want to identify/recognize).
     - Based on OpenFace and Dlib, face_recognition package is easy to implement and has 99% accuracy rate on LFW benchmark. Written by [Adam Geitgey](https://github.com/ageitgey) who also has [blog posts](https://medium.com/@ageitgey) with tutorials
 
+**Note** Azure allows only 10,000 calls/month, and Clarifai 5,000 calls/month, whereas face_recognition is open source
 
 **Step 3** Testing
 
 - All the images given to Testing APIs were already cropped images from Faster RCNN. The images (faces) given were from TV show 'Friends' Episode 2 Season 6
-- Although all the images passed where identified as 'face' by Faster RCNN, Testing packages 
+- Although all the images passed where identified as 'face' by Faster RCNN, Testing packages had different results
 
-| Face Recognition API | Identified | Recognized | Total | % (Identfied) | % (Recognized)
-| --- | --- | --- | --- | --- | --- |
-| Microsoft Azure |10,725 | 6038 | 11261 | 95% | 53%
+| Face Recognition API | Identified | Total | % (Identfied) | 
+| --- | --- | --- | --- |
+| Microsoft Azure | 6038 | 10,725 | 53%
 | Clarifai | 2765 | 4558 | 60%
-| face_recognition | 1661 | 3119 | 43% 
+| face_recognition | 1959 | 4558 | 43% |
 
-- Using the following table to compare 3 APIs is not quiet accurate. The reason is that the total amount of 
+- Using the following table to compare 3 APIs is not quiet accurate. The reason is that the total amount of images evaluated wasn't equal. As a result, in order to compare three APIs, you have to evaluate same number of images in all three.
+- I picked 4558 as max images evaluated because I ran out of free API calls on Clarifai 
 
-- **Note** the discrepancy of total varies due to fact that Azure allows only 10,000 calls/month, and Clarifai 5,000 calls/month. Package face_recognition is open source, but 
+| Face Recognition API | Identified | Total | % |
+| --- | --- | --- | --- |
+| Azure | 2066 | 4558 | 45% |
+| Clarifai | 2765 | 4558 | 60% |
+| face_recognition | 1959 | 4558 | 43% |
+
+**Verdict** 
+Considering that face_recognition is free, it performs quiet well compared to Azure. In fact, if you only need to recognize and identify faces, it is not worth using Microsoft Azure. However, note that Azure can also give you age, gender, hair color, and items in image (like glasses or hat). Clarifai performs quiet well compared two above mentioned packages. Nevertheless, Clarifai was able to identify only 60% of all images Faster RCNN identified as face. If you consider that Faster RCNN identified roughly 10% as false positives, there is still 30% that Clarifai was unable to identify.
