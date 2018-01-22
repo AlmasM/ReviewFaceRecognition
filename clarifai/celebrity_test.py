@@ -4,10 +4,7 @@ import os
 
 from clarifai.rest import ClarifaiApp
 from clarifai.rest import Image as ClImage
-app = ClarifaiApp(api_key='f7a91f12d5664eb4938cd583278e83f9')
-# model = app.models.get('celeb-v1.3')
-# image = ClImage(file_obj=open('/Users/almas/Documents/Research/demos/clarify/S06_e01_00_06.255#0_N_chandler.jpg', 'rb'))
-# response = model.predict([image])
+app = ClarifaiApp(api_key='yourKeyHere')
 
 # image Name + 1024 vector numbers 
 vectIm = open('/Users/almas/Documents/Research/demos/clarify/vectors.txt', 'w')
@@ -33,7 +30,7 @@ def clarifyFunc(files):
 	return res, boo
 
 
-inputDir = '/Users/almas/Documents/Research/face_recog/rcnn_recog_faces/S06_e02_faces_cropped/'
+inputDir = 'pathToFolder'
 def epIterate():
 	for files in os.listdir(inputDir):
 		if 'DS_Store' in files:
@@ -45,11 +42,6 @@ def epIterate():
 			summIm.write(fName + ' : ' + str(boo))
 			print files + ' : ' + str(boo) + ' _____ ' + str(clarOut)
 
-print 'Start_'
 epIterate()
-# fName = '/Users/almas/Documents/Research/demos/clarify/S06_e02_02_34.516#0_N_phoebe.jpg'
-# clarOut, boo = clarifyFunc(fName)
-# vectIm.write(inputDir + fName + ' : ' + str(clarOut))
-# summIm.write(inputDir + fName + ' : ' + str(boo))
 
 
