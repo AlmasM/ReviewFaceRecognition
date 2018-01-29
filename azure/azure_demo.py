@@ -6,7 +6,7 @@ import sys
 #### Update or verify the following values. ###
 ###############################################
 
-#demo
+#demo2
 
 faces ={}
 summIm = open('/Users/almas/Documents/Research/demos/azure/idenfied.txt', 'w')
