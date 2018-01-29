@@ -6,12 +6,10 @@ import sys
 #### Update or verify the following values. ###
 ###############################################
 
-<<<<<<< HEAD
+
 #demo
-#demoBranch3
-=======
-#demo2
->>>>>>> bad127ce67ec618f0b6569a54fe12151811caeb4
+#demoBranch4
+
 
 faces ={}
 summIm = open('/Users/almas/Documents/Research/demos/azure/idenfied.txt', 'w')
