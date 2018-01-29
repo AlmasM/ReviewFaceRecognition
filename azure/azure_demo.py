@@ -7,7 +7,7 @@ import sys
 ###############################################
 
 #demo
-#demoBranch2
+#demoBranch3
 
 faces ={}
 summIm = open('/Users/almas/Documents/Research/demos/azure/idenfied.txt', 'w')
